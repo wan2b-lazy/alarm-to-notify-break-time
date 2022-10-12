@@ -33,6 +33,10 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.mp3$/,
+        type: "asset/resource",
+      },
     ],
   },
 
