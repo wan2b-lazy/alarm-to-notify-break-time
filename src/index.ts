@@ -1,7 +1,7 @@
 import alarmFile from "./assets/alarm.mp3";
-import * as Alarm from "./assets/Alarm";
+import { Alarm } from "./assets/Alarm";
 
-declare let alarm: Alarm.Alarm;
+declare let alarm: Alarm;
 const divElem = document.querySelector<HTMLDivElement>("#alarm-content");
 if (divElem != null) {
   changeSettingAlarm(divElem);
@@ -26,7 +26,7 @@ function changeSettingAlarm(elem: HTMLDivElement) {
         document.querySelector<HTMLInputElement>("#scheduledToEnd");
 
       if (intervalInput && scheduledToEndInput) {
-        alarm = new Alarm.Alarm(
+        alarm = new Alarm(
           Number(intervalInput.value),
           scheduledToEndInput.value
         );
