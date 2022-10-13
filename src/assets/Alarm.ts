@@ -1,15 +1,13 @@
-export class Alarm {
-  interval: number;
-  scheduledToEnd: number[] | undefined;
-  date: Date;
-  audio: HTMLAudioElement;
+export class Alarm {}
 
-  constructor(interval: number, scheduledTime: string | undefined) {
-    this.interval = interval;
-    if (scheduledTime !== undefined) {
-      this.scheduledToEnd = scheduledTime.split(":").map(Number);
-    }
-    this.date = new Date();
-    this.audio = new Audio("./alarm.mp3");
-  }
-}
+export const changeSettingAlarm = (elem: HTMLElement) => {
+  console.log("changeSettingAlarm");
+};
+
+export const changeStandbyForAlarm = (elem: HTMLElement) => {
+  console.log("changeStandbyForAlarm");
+};
+
+export const changeAlarmNotification = (elem: HTMLElement) => {
+  console.log("changeAlarmNotification");
+};
