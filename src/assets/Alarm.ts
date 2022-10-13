@@ -6,24 +6,16 @@ export class Alarm {
   date: Date;
   audio: HTMLAudioElement;
 
-  constructor(intervalInput: number, scheduledToEndInput: string) {
+  constructor(intervalInput: number, scheduledToEndInput: string | undefined) {
     this.interval = intervalInput;
-    if (scheduledToEndInput != undefined) {
+    if (scheduledToEndInput != null) {
       this.scheduledToEnd = scheduledToEndInput.split(":").map(Number);
     }
     this.date = new Date();
     this.audio = new Audio(alarmFile);
   }
+
+  setAlarm() {
+    console.log("setAlarm");
+  }
 }
-
-export const changeSettingAlarm = (elem: HTMLElement) => {
-  return new Alarm(1, "仮置き");
-};
-
-export const changeStandbyForAlarm = (elem: HTMLElement) => {
-  console.log("changeStandbyForAlarm");
-};
-
-export const changeAlarmNotification = (elem: HTMLElement) => {
-  console.log("changeAlarmNotification");
-};
