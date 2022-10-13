@@ -10,8 +10,19 @@ function changeAlarmSetting(element: HTMLElement) {
 
   element.insertAdjacentHTML(
     "afterbegin",
-    `<h1>アラーム設定</h1><p><label for="interval">間隔（分）</label><input type="number" id="interval"><p><label for="scheduledToEnd">終了予定</label><input type="time" id="scheduledToEnd"></p><button id="startOfActivities">活動開始</button>`
+    `<h1>アラーム設定</h1><p><label for="interval">間隔（分）</label><input type="number" id="interval" required><p><label for="scheduledToEnd">終了予定</label><input type="time" id="scheduledToEnd"></p><button id="startOfActivities">活動開始</button>`
   );
+
+  const startButton = document.querySelector<HTMLElement>("#startOfActivities");
+  startButton!.addEventListener("click", () => {
+    const intervalInput = document.querySelector<HTMLInputElement>("#interval");
+    const scheduledToEndInput =
+      document.querySelector<HTMLInputElement>("#scheduledToEnd");
+
+    if (intervalInput && scheduledToEndInput) {
+      alarm = new Alarm(Number(intervalInput.value), scheduledToEndInput.value);
+    }
+  });
 }
 
 function changeStandbyForAlarm(element: HTMLElement) {
