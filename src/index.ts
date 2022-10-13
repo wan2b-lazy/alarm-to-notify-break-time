@@ -1,2 +1,2 @@
-import * as audio from "./assets/alarm.mp3";
-import * as Alarm from "./assets/Alarm";
+import audio from "./assets/alarm.mp3";
+import { Alarm } from "./assets/Alarm";
