@@ -41,6 +41,6 @@ export const changeStandbyForAlarm = (elem: HTMLElement) => {
   console.log("changeStandbyForAlarm");
 };
 
-export const changeAlarmNotification = (elem: HTMLElement) => {
+export const changeNotifyAlarm = (elem: HTMLDivElement) => {
   console.log("changeAlarmNotification");
 };

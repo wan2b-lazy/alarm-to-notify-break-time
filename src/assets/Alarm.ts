@@ -1,3 +1,4 @@
+import { changeNotifyAlarm } from "index";
 import alarmFile from "./alarm.mp3";
 
 export class Alarm {
@@ -6,7 +7,7 @@ export class Alarm {
   nextTime: number[];
   date: Date;
   audio: HTMLAudioElement;
-  timerId: number;
+  timerId: NodeJS.Timer | null;
 
   constructor(intervalInput: number, scheduledToEndInput: string | undefined) {
     this.interval = intervalInput;
@@ -16,7 +17,7 @@ export class Alarm {
     this.nextTime = [0, 0];
     this.date = new Date();
     this.audio = new Audio(alarmFile);
-    this.timerId = 0;
+    this.timerId = null;
   }
 
   calculateNextTime() {
@@ -34,5 +35,28 @@ export class Alarm {
     }
   }
 
-  setAlarm() {}
+  setAlarm() {
+    this.calculateNextTime();
+
+    this.timerId = setInterval(() => {
+      const currentHours = this.date.getHours();
+      const currentMinutes = this.date.getMinutes();
+
+      if (this.nextTime[0] < currentHours) {
+        currentHours - 24;
+      }
+
+      if (
+        currentHours >= this.nextTime[0] &&
+        currentMinutes >= this.nextTime[1]
+      ) {
+        const divElem =
+          document.querySelector<HTMLDivElement>("#alarm-content");
+        if (divElem && this.timerId) {
+          changeNotifyAlarm(divElem);
+          clearInterval(this.timerId);
+        }
+      }
+    });
+  }
 }
