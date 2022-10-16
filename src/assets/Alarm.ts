@@ -45,10 +45,26 @@ const changeAlarmSetting = (container: HTMLDivElement, instanceVar: Alarm) => {
       if (interval != null && endAt != null) {
         instanceVar = new Alarm(interval.value, endAt.value);
         instanceVar.setAlarm();
-        changeStandbyAlarm();
+        changeStandbyAlarm(container, instanceVar);
       }
     });
   }
 };
-const changeStandbyAlarm = () => {};
+const changeStandbyAlarm = (container: HTMLDivElement, instanceVar: Alarm) => {
+  while (container.firstChild) {
+    container.removeChild(container.firstChild);
+  }
+  container.insertAdjacentHTML(
+    "afterbegin",
+    `<p>次のアラームは<p>${instanceVar.nextTime[0]}時 ${instanceVar.nextTime[1]}分</p><button id="interruptionAlarm">アラーム中断</button>`
+  );
+
+  const interruptionAlarm = document.querySelector("#interruptionAlarm");
+  if (interruptionAlarm) {
+    interruptionAlarm.addEventListener("click", () => {
+      clearInterval(instanceVar.timerId);
+      changeAlarmSetting(container, instanceVar);
+    });
+  }
+};
 const changeAlarmNotification = () => {};
