@@ -14,13 +14,13 @@ class Alarm {
   date: Date;
   audio: HTMLAudioElement;
 
-  constructor(interval: number, endAt: string) {
-    this.interval = 0;
-    this.endAt = undefined;
+  constructor(interval: string, endAt: string | undefined) {
+    this.interval = Number(interval);
+    this.endAt = endAt === undefined ? undefined : endAt.split(":").map(Number);
     this.nextTime = [0];
     this.timerId = undefined;
     this.date = new Date();
-    this.audio = audioFile;
+    this.audio = new Audio(audioFile);
   }
 
   calculateNextTime() {}
@@ -43,8 +43,9 @@ const changeAlarmSetting = (container: HTMLDivElement, instanceVar: Alarm) => {
       const endAt = document.querySelector<HTMLInputElement>("#endAt");
 
       if (interval != null && endAt != null) {
-        instanceVar = new Alarm(Number(interval.value), endAt.value);
+        instanceVar = new Alarm(interval.value, endAt.value);
         instanceVar.setAlarm();
+        changeStandbyAlarm();
       }
     });
   }
