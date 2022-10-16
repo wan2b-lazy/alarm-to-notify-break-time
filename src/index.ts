@@ -1,8 +1,9 @@
-import { audioFile } from "./assets/alarm.mp3";
+import {
+  Alarm,
+  changeAlarmSetting,
+  changeStandbyAlarm,
+  changeAlarmNotification,
+} from "./assets/Alarm";
 
-class Alarm {}
-const changeAlarmSetting = () => {};
-const changeStandbyAlarm = () => {};
-const changeAlarmNotification = () => {};
-
-changeAlarmSetting();
+const container = document.querySelector("#container");
+declare let alarm: Alarm;
