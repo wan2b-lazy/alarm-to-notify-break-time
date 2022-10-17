@@ -1,13 +1,12 @@
 import {
   Alarm,
-  changeAlarmSetting,
-  changeStandbyAlarm,
-  changeAlarmNotification,
+  onStartActivitiesClicked,
+  onInterruptionAlarmClicked,
+  changePageOther,
+  settingAlarm,
+  standbyAlarm,
+  alarmNotification,
 } from "./assets/Alarm";
 
 const container = document.querySelector<HTMLDivElement>("#container");
-let alarm: Alarm | null = null;
-
-if (container) {
-  changeAlarmSetting(container, alarm!);
-}
+let instanceOfAlarm: Alarm | undefined = undefined;

@@ -1,9 +1,33 @@
 import { audioFile } from "./alarm.mp3";
 export {
+  settingAlarm,
+  standbyAlarm,
+  alarmNotification,
   Alarm,
-  changeAlarmSetting,
-  changeStandbyAlarm,
-  changeAlarmNotification,
+  changePageOther,
+  onStartActivitiesClicked,
+  onInterruptionAlarmClicked,
+  onStartStretchClicked,
+  onRestartAlarmClicked,
+};
+
+let instanceOfAlarm: Alarm | undefined = undefined;
+const container = document.querySelector("#container");
+interface PageText {
+  name: string;
+  text: string;
+}
+const settingAlarm: PageText = {
+  name: "settingAlarm",
+  text: `<h1>アラーム設定</h1><p><label for="interval">間隔（分）</label><input type="number" id="interval"><p><label for="endAt">終了予定</label><input type="time" id="endAt"></p><button id="startActivities">活動開始</button>`,
+};
+const standbyAlarm: PageText = {
+  name: "standbyAlarm",
+  text: `<p>次のアラームは<p id="nextTime"></p><button id="interruptionAlarm">アラーム中断</button>`,
+};
+const alarmNotification: PageText = {
+  name: "alarmNotification",
+  text: `<p>ストレッチの時間です</p><button id="startStretch">ストレッチ開始</button> <button id="restartAlarm" disabled>ストレッチ完了</button> <button id="interruptionAlarm">アラーム中断</button>`,
 };
 
 class Alarm {
@@ -27,44 +51,47 @@ class Alarm {
 
   setAlarm() {}
 }
-const changeAlarmSetting = (container: HTMLDivElement, instanceVar: Alarm) => {
-  while (container.firstChild) {
-    container.removeChild(container.firstChild);
-  }
-  container.insertAdjacentHTML(
-    "afterbegin",
-    `<h1>アラーム設定</h1><p><label for="interval">間隔（分）</label><input type="number" id="interval"><p><label for="endAt">終了予定</label><input type="time" id="endAt"></p><button id="startActivities">活動開始</button>`
-  );
 
-  const startActivities = document.querySelector("#startActivities");
-  if (startActivities) {
-    startActivities.addEventListener("click", () => {
-      const interval = document.querySelector<HTMLInputElement>("#interval");
-      const endAt = document.querySelector<HTMLInputElement>("#endAt");
-
-      if (interval != null && endAt != null) {
-        instanceVar = new Alarm(interval.value, endAt.value);
-        instanceVar.setAlarm();
-        changeStandbyAlarm(container, instanceVar);
-      }
-    });
+const changePageOther = (pageText: PageText) => {
+  if (container) {
+    while (container.firstChild) {
+      container.removeChild(container.firstChild);
+    }
+    container.insertAdjacentHTML("afterbegin", pageText.text);
   }
 };
-const changeStandbyAlarm = (container: HTMLDivElement, instanceVar: Alarm) => {
-  while (container.firstChild) {
-    container.removeChild(container.firstChild);
-  }
-  container.insertAdjacentHTML(
-    "afterbegin",
-    `<p>次のアラームは<p>${instanceVar.nextTime[0]}時 ${instanceVar.nextTime[1]}分</p><button id="interruptionAlarm">アラーム中断</button>`
-  );
 
-  const interruptionAlarm = document.querySelector("#interruptionAlarm");
-  if (interruptionAlarm) {
-    interruptionAlarm.addEventListener("click", () => {
-      clearInterval(instanceVar.timerId);
-      changeAlarmSetting(container, instanceVar);
-    });
+const onStartActivitiesClicked = (): void => {
+  const interval = document.querySelector<HTMLInputElement>("#interval");
+  const endAt = document.querySelector<HTMLInputElement>("#endAt");
+  if (interval && endAt) {
+    instanceOfAlarm = new Alarm(interval.value, endAt.value);
+    instanceOfAlarm.setAlarm();
+    changePageOther(standbyAlarm);
+    return;
+  }
+  return;
+};
+const onInterruptionAlarmClicked = (): void => {
+  if (instanceOfAlarm != undefined) {
+    clearInterval(instanceOfAlarm.timerId);
+    changePageOther(settingAlarm);
   }
 };
-const changeAlarmNotification = () => {};
+const onStartStretchClicked = (): void => {
+  if (instanceOfAlarm != undefined) {
+    instanceOfAlarm.audio.pause();
+    instanceOfAlarm.audio.currentTime = 0;
+    const restartAlarm =
+      document.querySelector<HTMLButtonElement>("#restartAlarm");
+    if (restartAlarm) {
+      restartAlarm.disabled = false;
+    }
+  }
+};
+const onRestartAlarmClicked = (): void => {
+  if (instanceOfAlarm != undefined) {
+    instanceOfAlarm.setAlarm();
+    changePageOther(standbyAlarm);
+  }
+};
