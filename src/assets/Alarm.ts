@@ -1,4 +1,4 @@
-import { audioFile } from "./alarm.mp3";
+import audioFile from "./audioFile";
 export {
   settingAlarm,
   standbyAlarm,
@@ -47,9 +47,48 @@ class Alarm {
     this.audio = new Audio(audioFile);
   }
 
-  calculateNextTime() {}
+  calculateNextTime() {
+    this.nextTime[0] = this.date.getHours() + Math.floor(this.interval / 60);
+    this.nextTime[1] = this.date.getMinutes() + (this.interval % 60);
 
-  setAlarm() {}
+    if (this.nextTime[1] >= 60) {
+      const convertedMinutes = Math.floor(this.nextTime[1] / 60);
+      this.nextTime[1] - convertedMinutes * 60;
+      this.nextTime[0] + convertedMinutes;
+    }
+
+    if (this.nextTime[1] >= 24) {
+      this.nextTime[1] - 24;
+    }
+  }
+
+  setAlarm() {
+    this.timerId = setTimeout(() => {
+      this.audio.play();
+      clearTimeout(this.timerId);
+      changePageOther(alarmNotification);
+    }, this.interval * 60 * 1000);
+    /*
+    this.calculateNextTime();
+    this.timerId = setInterval(() => {
+      const currentHours = this.date.getHours();
+      const currentMinutes = this.date.getMinutes();
+      console.log(currentHours, currentMinutes, this.date.getSeconds());
+      if (this.nextTime[0] < currentHours) {
+        currentHours - 24;
+      }
+
+      if (
+        currentHours >= this.nextTime[0] &&
+        currentMinutes >= this.nextTime[1]
+      ) {
+        instanceOfAlarm?.audio.play();
+        changePageOther(alarmNotification);
+        clearInterval(this.timerId);
+      }
+    }, 1000);
+    */
+  }
 }
 
 const changePageOther = (pageText: PageText) => {
@@ -58,6 +97,40 @@ const changePageOther = (pageText: PageText) => {
       container.removeChild(container.firstChild);
     }
     container.insertAdjacentHTML("afterbegin", pageText.text);
+  }
+
+  switch (pageText.name) {
+    case "settingAlarm":
+      const startActivities = document.querySelector("#startActivities");
+      if (startActivities != undefined) {
+        startActivities.addEventListener("click", onStartActivitiesClicked);
+      }
+    case "standbyAlarm":
+      const interruptionAlarmInStandbyAlarm =
+        document.querySelector("#interruptionAlarm");
+      if (interruptionAlarmInStandbyAlarm != undefined) {
+        interruptionAlarmInStandbyAlarm.addEventListener(
+          "click",
+          onInterruptionAlarmClicked
+        );
+      }
+    case "alarmNotification":
+      const startStretch = document.querySelector("#startStretch");
+      const restartAlarm = document.querySelector("#restartAlarm");
+      const interruptionAlarmInAlarmNotification =
+        document.querySelector("#interruptionAlarm");
+      if (
+        startStretch &&
+        restartAlarm &&
+        interruptionAlarmInAlarmNotification
+      ) {
+        startStretch.addEventListener("click", onStartStretchClicked);
+        restartAlarm.addEventListener("click", onRestartAlarmClicked);
+        interruptionAlarmInAlarmNotification.addEventListener(
+          "click",
+          onInterruptionAlarmClicked
+        );
+      }
   }
 };
 
