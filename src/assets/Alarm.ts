@@ -63,6 +63,7 @@ class Alarm {
   }
 
   setAlarm() {
+    this.calculateNextTime();
     this.timerId = setTimeout(() => {
       this.audio.play();
       clearTimeout(this.timerId);
@@ -106,6 +107,10 @@ const changePageOther = (pageText: PageText) => {
         startActivities.addEventListener("click", onStartActivitiesClicked);
       }
     case "standbyAlarm":
+      const nextTime = document.querySelector("#nextTime");
+      if (nextTime != undefined) {
+        nextTime.textContent = `${instanceOfAlarm?.nextTime[0]}時 ${instanceOfAlarm?.nextTime[1]}分`;
+      }
       const interruptionAlarmInStandbyAlarm =
         document.querySelector("#interruptionAlarm");
       if (interruptionAlarmInStandbyAlarm != undefined) {
