@@ -1,4 +1,5 @@
 const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   entry: "./src/index.ts",
@@ -8,6 +9,15 @@ module.exports = {
     filename: "bundle.js",
     assetModuleFilename: "[name][ext][query]",
   },
+
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: "AlarmToNotifyBreakTime",
+      template: "src/assets/index.html",
+    }),
+  ],
+
+  target: "electron-main",
 
   resolve: {
     extensions: [".ts", "..."],

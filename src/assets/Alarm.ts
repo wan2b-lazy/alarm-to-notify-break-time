@@ -12,7 +12,7 @@ export {
 };
 
 let instanceOfAlarm: Alarm | undefined = undefined;
-const container = document.querySelector("#container");
+const container = document.querySelector("#root");
 interface PageText {
   name: string;
   text: string;
@@ -57,26 +57,29 @@ class Alarm {
       this.nextTime[0] + convertedMinutes;
     }
 
-    if (this.nextTime[1] >= 24) {
-      this.nextTime[1] - 24;
+    if (this.nextTime[0] >= 24) {
+      this.nextTime[0] = this.nextTime[0] - 24;
     }
   }
 
   setAlarm() {
     this.calculateNextTime();
+
     this.timerId = setTimeout(() => {
       this.audio.play();
       clearTimeout(this.timerId);
       changePageOther(alarmNotification);
     }, this.interval * 60 * 1000);
+
     /*
     this.calculateNextTime();
+    let currentHours = this.date.getHours();
+    let currentMinutes = this.date.getMinutes();
     this.timerId = setInterval(() => {
-      const currentHours = this.date.getHours();
-      const currentMinutes = this.date.getMinutes();
-      console.log(currentHours, currentMinutes, this.date.getSeconds());
+      currentHours = this.date.getHours();
+      currentMinutes = this.date.getMinutes();
       if (this.nextTime[0] < currentHours) {
-        currentHours - 24;
+        currentHours = currentHours - 24;
       }
 
       if (
