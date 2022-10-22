@@ -45,6 +45,7 @@ class Alarm {
     this.timerId = undefined;
     this.date = new Date();
     this.audio = new Audio(audioFile);
+    this.audio.volume = 0.5;
   }
 
   calculateNextTime() {
@@ -53,8 +54,8 @@ class Alarm {
 
     if (this.nextTime[1] >= 60) {
       const convertedMinutes = Math.floor(this.nextTime[1] / 60);
-      this.nextTime[1] - convertedMinutes * 60;
-      this.nextTime[0] + convertedMinutes;
+      this.nextTime[1] = this.nextTime[1] - convertedMinutes * 60;
+      this.nextTime[0] = this.nextTime[0] + convertedMinutes;
     }
 
     if (this.nextTime[0] >= 24) {
