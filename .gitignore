@@ -128,3 +128,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# buildFolder
+alarm-to-notify-break-time-win32-x64/
